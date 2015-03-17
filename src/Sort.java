@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Sort {
 	public static void selectionSort(int[] a) {
@@ -29,26 +27,74 @@ public class Sort {
 
 	public static void insertionSort(int[] a) {
 		for (int i = 1; i < a.length; i++) {
-			int temp = i;
-			while (temp > 0 && a[temp] < a[temp - 1]) {
-				int tempval = a[temp];
-				a[temp] = a[temp - 1];
-				a[temp - 1] = tempval;
-				temp--;
+			int index = i;
+			int val = a[i];
+			while (index > 0 && val < a[index - 1]) {
+				a[index] = a[index - 1];
+				index--;
 			}
+			a[index] = val;
 		}
-
 	}
 
 	public static void insertionSort(ArrayList<String> a) {
 		for (int i = 1; i < a.size(); i++) {
-			int temp = i;
-			while (temp > 0 && a.get(temp - 1).compareTo(a.get(temp)) > 0) {
-				a.set(temp, a.set(temp - 1, a.get(temp)));
-				temp--;
+			int index = i;
+			String val = a.remove(i);
+			while (index > 0 && val.compareTo(a.get(index - 1)) < 0)
+				index--;
+			a.add(index, val);
+		}
+	}
+
+	public static void mergeSort(int[] a) {
+		if (a.length < 2)
+			return;
+		int mid = a.length / 2;
+		int[] left = subArray(a, 0, mid);
+		int[] right = subArray(a, mid, a.length);
+		mergeSort(left);
+		mergeSort(right);
+		for (int i = 0, j = 0, n = 0; n < a.length; n++) {
+			if (i > left.length - 1 || j < right.length && left[i] > right[j]) {
+				a[n] = right[j];
+				j++;
+			} else {
+				a[n] = left[i];
+				i++;
 			}
 		}
 	}
+	public static int[] subArray(int[] a, int start, int end) {
+		int[] out = new int[end - start];
+		for (int i = start, j = 0; i < end; i++, j++)
+			out[j] = a[i];
+		return out;
+	}
+	public static void mergeSort(ArrayList<String> a) {
+		if (a.size() < 2)
+			return;
+		int mid = a.size() / 2;
+		ArrayList<String> left = (ArrayList<String>) a.subList(0, mid);
+		ArrayList<String> right = (ArrayList<String>) a.subList(mid, a.size());
+		mergeSort(left);
+		mergeSort(right);
+		for (int i = 0, j = 0, n = 0; n < a.size(); n++) {
+			if (i > left.size() - 1 || j < right.size()
+					&& left.get(i).compareTo(right.get(j)) > 1)
+				a.add(n, right.get(j++));
+			else
+				a.add(n, left.get(i++));
+		}
+	}
+
+	public static int[] subArrayList(ArrayList<String> a, int start, int end){
+		ArrayList<Integer> out = new ArrayList<> (end - start);
+		for (int i = start, j = 0; i < end; i++, j++)
+			out.add(a.get(i));
+		return out;
+	}
+
 
 	public static String arrayString(int[] a) {
 		String out = "[";
@@ -70,7 +116,7 @@ public class Sort {
 		al.add("apple");
 
 		System.out.println(al);
-		insertionSort(al);
+		mergeSort(al);
 		System.out.println(al);
 	}
 }
