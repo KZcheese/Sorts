@@ -40,10 +40,12 @@ public class Sort {
 	public static void insertionSort(ArrayList<String> a) {
 		for (int i = 1; i < a.size(); i++) {
 			int index = i;
-			String val = a.remove(i);
-			while (index > 0 && val.compareTo(a.get(index - 1)) < 0)
+			String val = a.get(i);
+			while (index > 0 && val.compareTo(a.get(index - 1)) < 0) {
+				a.set(index, a.get(index - 1));
 				index--;
-			a.add(index, val);
+			}
+			a.set(index, val);
 		}
 	}
 
@@ -56,45 +58,66 @@ public class Sort {
 		mergeSort(left);
 		mergeSort(right);
 		for (int i = 0, j = 0, n = 0; n < a.length; n++) {
-			if (i > left.length - 1 || j < right.length && left[i] > right[j]) {
-				a[n] = right[j];
-				j++;
-			} else {
-				a[n] = left[i];
-				i++;
-			}
+			if (i > left.length - 1 || j < right.length && left[i] > right[j])
+				a[n] = right[j++];
+			else
+				a[n] = left[i++];
 		}
 	}
+
 	public static int[] subArray(int[] a, int start, int end) {
 		int[] out = new int[end - start];
 		for (int i = start, j = 0; i < end; i++, j++)
 			out[j] = a[i];
 		return out;
 	}
+
 	public static void mergeSort(ArrayList<String> a) {
 		if (a.size() < 2)
 			return;
 		int mid = a.size() / 2;
-		ArrayList<String> left = (ArrayList<String>) a.subList(0, mid);
-		ArrayList<String> right = (ArrayList<String>) a.subList(mid, a.size());
+		ArrayList<String> left = subArrayList(a, 0, mid);
+		ArrayList<String> right = subArrayList(a, mid, a.size());
 		mergeSort(left);
 		mergeSort(right);
 		for (int i = 0, j = 0, n = 0; n < a.size(); n++) {
 			if (i > left.size() - 1 || j < right.size()
-					&& left.get(i).compareTo(right.get(j)) > 1)
-				a.add(n, right.get(j++));
+					&& left.get(i).compareTo(right.get(j)) > 0)
+				a.set(n, right.get(j++));
 			else
-				a.add(n, left.get(i++));
+				a.set(n, left.get(i++));
 		}
 	}
 
-	public static int[] subArrayList(ArrayList<String> a, int start, int end){
-		ArrayList<Integer> out = new ArrayList<> (end - start);
-		for (int i = start, j = 0; i < end; i++, j++)
+	public static ArrayList<String> subArrayList(ArrayList<String> a,
+			int start, int end) {
+		ArrayList<String> out = new ArrayList<String>();
+		for (int i = start; i < end; i++)
 			out.add(a.get(i));
 		return out;
 	}
 
+	public static void quickSort(int[] a) {
+		quickSort(a, 0, 1, a.length - 1);
+	}
+
+	public static void quickSort(int[] a, int pivot, int left, int right) {
+		if (left > right) {
+			int temp = a[pivot];
+			a[pivot] = a[right];
+			a[right] = temp;
+			quickSort(a, pivot, ++left, ++right);
+		} else if (a[pivot] < a[left]) {
+			if (pivot > right) {
+				int temp = a[left];
+				a[left] = a[right];
+				a[right] = temp;
+				quickSort(a, pivot, ++left, ++right);
+			} else
+				quickSort(a, pivot, left, ++right);
+		} else if (a[pivot] > a[right])
+			quickSort(a, pivot, ++left, right);
+	}
 
 	public static String arrayString(int[] a) {
 		String out = "[";
@@ -106,7 +129,7 @@ public class Sort {
 	public static void main(String[] args) {
 		int[] a = { 5, 6, 8, 4, 0, 7, 3, 7, 4 };
 		System.out.println(arrayString(a));
-		insertionSort(a);
+		mergeSort(a);
 		System.out.println(arrayString(a));
 		ArrayList<String> al = new ArrayList<>();
 		al.add("word");
@@ -114,7 +137,6 @@ public class Sort {
 		al.add("woot");
 		al.add("banananannananana");
 		al.add("apple");
-
 		System.out.println(al);
 		mergeSort(al);
 		System.out.println(al);
