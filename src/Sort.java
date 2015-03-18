@@ -102,20 +102,21 @@ public class Sort {
 	}
 
 	public static void quickSort(int[] a, int pivot, int left, int right) {
+		if(pivot < 0 || pivot > a.length - 1) return;
 		if (left > right) {
 			int temp = a[pivot];
 			a[pivot] = a[right];
 			a[right] = temp;
-			quickSort(a, pivot, ++left, ++right);
+			quickSort(a, pivot + 1, pivot + 2, a.length - 1);
 		} else if (a[pivot] < a[left]) {
 			if (pivot > right) {
 				int temp = a[left];
 				a[left] = a[right];
 				a[right] = temp;
-				quickSort(a, pivot, ++left, ++right);
+				quickSort(a, pivot, ++left, --right);
 			} else
-				quickSort(a, pivot, left, ++right);
-		} else if (a[pivot] > a[right])
+				quickSort(a, pivot, left, --right);
+		} else
 			quickSort(a, pivot, ++left, right);
 	}
 
@@ -129,7 +130,7 @@ public class Sort {
 	public static void main(String[] args) {
 		int[] a = { 5, 6, 8, 4, 0, 7, 3, 7, 4 };
 		System.out.println(arrayString(a));
-		mergeSort(a);
+		quickSort(a);
 		System.out.println(arrayString(a));
 		ArrayList<String> al = new ArrayList<>();
 		al.add("word");
