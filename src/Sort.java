@@ -102,22 +102,43 @@ public class Sort {
 	}
 
 	public static void quickSort(int[] a, int pivot, int left, int right) {
-		if(pivot < 0 || pivot > a.length - 1) return;
-		if (left > right) {
+		int leftCount = left;
+		int rightCount = right;
+		while (a[leftCount] < a[pivot] && leftCount < rightCount)
+			leftCount++;
+		while (a[rightCount] > a[pivot] && leftCount < rightCount)
+			rightCount--;
+		if (rightCount < leftCount) {
 			int temp = a[pivot];
-			a[pivot] = a[right];
-			a[right] = temp;
-			quickSort(a, pivot + 1, pivot + 2, a.length - 1);
-		} else if (a[pivot] < a[left]) {
-			if (pivot > right) {
-				int temp = a[left];
-				a[left] = a[right];
-				a[right] = temp;
-				quickSort(a, pivot, ++left, --right);
-			} else
-				quickSort(a, pivot, left, --right);
-		} else
-			quickSort(a, pivot, ++left, right);
+			a[pivot] = a[leftCount];
+			a[leftCount] = temp;
+			System.out.println(rightCount);
+			if (rightCount < 1 || rightCount > a.length - 1)
+				return;
+			quickSort(a, 0, left, rightCount - 1);
+			quickSort(a, 0, rightCount, right);
+		} else {
+			System.out.println(rightCount);
+			int temp = a[leftCount];
+			a[leftCount] = a[rightCount];
+			a[rightCount] = temp;
+
+			if (rightCount < 1 || rightCount > a.length - 1)
+				return;
+			quickSort(a, pivot, ++leftCount, --rightCount);
+		}
+	}
+
+	public static void bogoSort(int[] a) {
+		boolean isSorted = true;
+		for (int i = 0; i < a.length - 1; i++) {
+			if (a[i] > a[i + 1]) {
+				isSorted = false;
+				break;
+			}
+		}
+		if (isSorted)
+			return;
 	}
 
 	public static String arrayString(int[] a) {
