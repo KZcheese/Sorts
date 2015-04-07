@@ -103,14 +103,14 @@ public class Sort {
 	}
 
 	public static void quickSort(int[] a, int pivot, int left, int right) {
-		if (left >= right)
+		if (left > right)
 			return;
 		int leftCount = left;
 		int rightCount = right;
 		while (leftCount < rightCount) {
-			while (leftCount <= rightCount && leftCount < right && a[leftCount] < a[pivot])
+			while (leftCount <= rightCount && a[leftCount] <= a[pivot])
 				leftCount++;
-			while (leftCount <= rightCount && rightCount > pivot && a[rightCount] >= a[pivot])
+			while (leftCount <= rightCount && a[rightCount] > a[pivot])
 				rightCount--;
 			if (leftCount < rightCount) {
 				int temp = a[leftCount];
@@ -137,15 +137,18 @@ public class Sort {
 			return;
 		int leftCount = left;
 		int rightCount = right;
-		while (leftCount < rightCount) {
-			while (leftCount <= rightCount && leftCount < right && a.get(leftCount).compareTo(a.get(pivot)) < 0)
+		while (leftCount <= rightCount) {
+			while (leftCount <= rightCount
+					&& a.get(leftCount).compareTo(a.get(pivot)) <= 0)
 				leftCount++;
-			while (leftCount <= rightCount && rightCount > pivot && a.get(rightCount).compareTo(a.get(pivot)) >= 0)
+			while (leftCount <= rightCount
+					&& a.get(rightCount).compareTo(a.get(pivot)) > 0)
 				rightCount--;
-			if (leftCount < rightCount)
+			if (leftCount <= rightCount)
 				a.set(leftCount, a.set(rightCount, a.get(leftCount)));
 		}
 		a.set(rightCount, a.set(pivot, a.get(rightCount)));
+		// System.out.println(a);
 		if (rightCount > 1)
 			quickSort(a, pivot, pivot + 1, rightCount - 1);
 		if (rightCount + 2 < a.size() - 1)
@@ -208,10 +211,11 @@ public class Sort {
 	}
 
 	public static void main(String[] args) {
-		int[] a = { 0,0,0,0,0,0,0,5, 6, 8, 4, 0, 7, 3, 7, 4,2,345,23,56, 238 };
-		System.out.println(a.length);
+		int[] a = { 0, 0, 0, 0, 0, 0, 0, 5, 6, 8, 4, 0, 7, 3, 7, 4, 2, 345, 23,
+				56, 238 };
+		// System.out.println(a.length);
 		System.out.println(arrayString(a));
-		System.out.println(a.length);
+		// System.out.println(a.length);
 		quickSort(a);
 		System.out.println(arrayString(a));
 		ArrayList<String> al = new ArrayList<>();
@@ -223,8 +227,34 @@ public class Sort {
 		al.add("doo");
 		al.add("sarasarasarasa");
 		System.out.println(al);
-//		mergeSort(al);
+		// mergeSort(al);
 		quickSort(al);
 		System.out.println(al);
+
+		int[] b = { -9, 8, 7, 6, 5, 4, 3, 2, 1 };
+		System.out.println(arrayString(b));
+		quickSort(b);
+		System.out.println(arrayString(b));
+		ArrayList<String> bl = new ArrayList<>();
+		bl.add("zeta");
+		bl.add("yoda");
+		bl.add("xray");
+		bl.add("wish");
+		bl.add("want");
+		bl.add("vile");
+		bl.add("vial");
+		bl.add("upon");
+		bl.add("want");
+		System.out.println(bl);
+		quickSort(bl);
+		System.out.println(bl);
+		/*
+		 * int[] version: Original array: -9 8 7 6 5 4 3 2 1 "Sorted" array: -9
+		 * 1 2 3 5 4 6 7 8 false
+		 * 
+		 * ArrayList version: Original: [zeta, yoda, xray, wish, want, vile,
+		 * vial, upon, want] Sorted: [upon, vial, vile, want, want, wish, yoda,
+		 * xray, zeta] false
+		 */
 	}
 }
