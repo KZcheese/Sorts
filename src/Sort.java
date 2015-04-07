@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Sort {
 	public static void selectionSort(int[] a) {
@@ -102,43 +103,101 @@ public class Sort {
 	}
 
 	public static void quickSort(int[] a, int pivot, int left, int right) {
+		if (left >= right)
+			return;
 		int leftCount = left;
 		int rightCount = right;
-		while (a[leftCount] < a[pivot] && leftCount < rightCount)
-			leftCount++;
-		while (a[rightCount] > a[pivot] && leftCount < rightCount)
-			rightCount--;
-		if (rightCount < leftCount) {
-			int temp = a[pivot];
-			a[pivot] = a[leftCount];
-			a[leftCount] = temp;
-			System.out.println(rightCount);
-			if (rightCount < 1 || rightCount > a.length - 1)
-				return;
-			quickSort(a, 0, left, rightCount - 1);
-			quickSort(a, 0, rightCount, right);
-		} else {
-			System.out.println(rightCount);
-			int temp = a[leftCount];
-			a[leftCount] = a[rightCount];
-			a[rightCount] = temp;
-
-			if (rightCount < 1 || rightCount > a.length - 1)
-				return;
-			quickSort(a, pivot, ++leftCount, --rightCount);
+		while (leftCount < rightCount) {
+			while (leftCount <= rightCount && leftCount < right && a[leftCount] < a[pivot])
+				leftCount++;
+			while (leftCount <= rightCount && rightCount > pivot && a[rightCount] >= a[pivot])
+				rightCount--;
+			if (leftCount < rightCount) {
+				int temp = a[leftCount];
+				a[leftCount] = a[rightCount];
+				a[rightCount] = temp;
+			}
 		}
+		int temp = a[rightCount];
+		a[rightCount] = a[pivot];
+		a[pivot] = temp;
+		if (rightCount > 1)
+			quickSort(a, pivot, pivot + 1, rightCount - 1);
+		if (rightCount + 2 < a.length - 1)
+			quickSort(a, rightCount + 1, rightCount + 2, right);
+	}
+
+	public static void quickSort(ArrayList<String> a) {
+		quickSort(a, 0, 1, a.size() - 1);
+	}
+
+	public static void quickSort(ArrayList<String> a, int pivot, int left,
+			int right) {
+		if (left > right)
+			return;
+		int leftCount = left;
+		int rightCount = right;
+		while (leftCount < rightCount) {
+			while (leftCount <= rightCount && leftCount < right && a.get(leftCount).compareTo(a.get(pivot)) < 0)
+				leftCount++;
+			while (leftCount <= rightCount && rightCount > pivot && a.get(rightCount).compareTo(a.get(pivot)) >= 0)
+				rightCount--;
+			if (leftCount < rightCount)
+				a.set(leftCount, a.set(rightCount, a.get(leftCount)));
+		}
+		a.set(rightCount, a.set(pivot, a.get(rightCount)));
+		if (rightCount > 1)
+			quickSort(a, pivot, pivot + 1, rightCount - 1);
+		if (rightCount + 2 < a.size() - 1)
+			quickSort(a, rightCount + 1, rightCount + 2, right);
 	}
 
 	public static void bogoSort(int[] a) {
-		boolean isSorted = true;
-		for (int i = 0; i < a.length - 1; i++) {
-			if (a[i] > a[i + 1]) {
-				isSorted = false;
-				break;
+		boolean isSorted;
+		Random rand = new Random();
+		while (true) {
+			isSorted = true;
+			for (int i = 0; i < a.length - 1; i++) {
+				if (a[i] > a[i + 1]) {
+					isSorted = false;
+					break;
+				}
+			}
+			if (isSorted)
+				return;
+			ArrayList<Integer> al = new ArrayList<>();
+			for (int n : a)
+				al.add(n);
+			int randomNum;
+			for (int i = 0; al.size() > 0; i++) {
+				randomNum = rand.nextInt(al.size());
+				a[i] = al.remove(randomNum);
 			}
 		}
-		if (isSorted)
-			return;
+	}
+
+	public static void bogoSort(ArrayList<String> a) {
+		boolean isSorted;
+		Random rand = new Random();
+		while (true) {
+			isSorted = true;
+			for (int i = 0; i < a.size() - 1; i++) {
+				if (a.get(i).compareTo(a.get(i + 1)) > 0) {
+					isSorted = false;
+					break;
+				}
+			}
+			if (isSorted)
+				return;
+			ArrayList<String> al = new ArrayList<>();
+			int randomNum;
+			for (String n : a)
+				al.add(n);
+			for (int i = 0; al.size() > 0; i++) {
+				randomNum = rand.nextInt(al.size());
+				a.set(i, al.remove(randomNum));
+			}
+		}
 	}
 
 	public static String arrayString(int[] a) {
@@ -149,8 +208,10 @@ public class Sort {
 	}
 
 	public static void main(String[] args) {
-		int[] a = { 5, 6, 8, 4, 0, 7, 3, 7, 4 };
+		int[] a = { 0,0,0,0,0,0,0,5, 6, 8, 4, 0, 7, 3, 7, 4,2,345,23,56, 238 };
+		System.out.println(a.length);
 		System.out.println(arrayString(a));
+		System.out.println(a.length);
 		quickSort(a);
 		System.out.println(arrayString(a));
 		ArrayList<String> al = new ArrayList<>();
@@ -159,8 +220,11 @@ public class Sort {
 		al.add("woot");
 		al.add("banananannananana");
 		al.add("apple");
+		al.add("doo");
+		al.add("sarasarasarasa");
 		System.out.println(al);
-		mergeSort(al);
+//		mergeSort(al);
+		quickSort(al);
 		System.out.println(al);
 	}
 }
