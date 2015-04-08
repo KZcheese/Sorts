@@ -99,15 +99,16 @@ public class Sort {
 	}
 
 	public static void quickSort(int[] a) {
-		quickSort(a, 0, 1, a.length - 1);
+		quickSort(a, 0, a.length - 1);
 	}
 
-	public static void quickSort(int[] a, int pivot, int left, int right) {
+	public static void quickSort(int[] a, int left, int right) {
 		if (left > right)
 			return;
-		int leftCount = left;
+		int pivot = left;
+		int leftCount = left + 1;
 		int rightCount = right;
-		while (leftCount < rightCount) {
+		while (leftCount <= rightCount) {
 			while (leftCount <= rightCount && a[leftCount] <= a[pivot])
 				leftCount++;
 			while (leftCount <= rightCount && a[rightCount] > a[pivot])
@@ -122,20 +123,20 @@ public class Sort {
 		a[rightCount] = a[pivot];
 		a[pivot] = temp;
 		if (rightCount > 1)
-			quickSort(a, pivot, pivot + 1, rightCount - 1);
+			quickSort(a, left, rightCount - 1);
 		if (rightCount + 2 < a.length - 1)
-			quickSort(a, rightCount + 1, rightCount + 2, right);
+			quickSort(a, rightCount + 1, right);
 	}
 
 	public static void quickSort(ArrayList<String> a) {
-		quickSort(a, 0, 1, a.size() - 1);
+		quickSort(a, 0, a.size() - 1);
 	}
 
-	public static void quickSort(ArrayList<String> a, int pivot, int left,
-			int right) {
+	public static void quickSort(ArrayList<String> a, int left, int right) {
 		if (left > right)
 			return;
-		int leftCount = left;
+		int pivot = left;
+		int leftCount = left + 1;
 		int rightCount = right;
 		while (leftCount <= rightCount) {
 			while (leftCount <= rightCount
@@ -148,11 +149,10 @@ public class Sort {
 				a.set(leftCount, a.set(rightCount, a.get(leftCount)));
 		}
 		a.set(rightCount, a.set(pivot, a.get(rightCount)));
-		// System.out.println(a);
 		if (rightCount > 1)
-			quickSort(a, pivot, pivot + 1, rightCount - 1);
+			quickSort(a, pivot, rightCount - 1);
 		if (rightCount + 2 < a.size() - 1)
-			quickSort(a, rightCount + 1, rightCount + 2, right);
+			quickSort(a, rightCount + 1, right);
 	}
 
 	public static void bogoSort(int[] a) {
@@ -160,12 +160,11 @@ public class Sort {
 		Random rand = new Random();
 		while (true) {
 			isSorted = true;
-			for (int i = 0; i < a.length - 1; i++) {
+			for (int i = 0; i < a.length - 1; i++)
 				if (a[i] > a[i + 1]) {
 					isSorted = false;
 					break;
 				}
-			}
 			if (isSorted)
 				return;
 			ArrayList<Integer> al = new ArrayList<>();
@@ -184,12 +183,11 @@ public class Sort {
 		Random rand = new Random();
 		while (true) {
 			isSorted = true;
-			for (int i = 0; i < a.size() - 1; i++) {
+			for (int i = 0; i < a.size() - 1; i++)
 				if (a.get(i).compareTo(a.get(i + 1)) > 0) {
 					isSorted = false;
 					break;
 				}
-			}
 			if (isSorted)
 				return;
 			ArrayList<String> al = new ArrayList<>();
@@ -248,6 +246,10 @@ public class Sort {
 		System.out.println(bl);
 		quickSort(bl);
 		System.out.println(bl);
+		int[] c = { 6, 8, 4, -1, 9, 3, 6, 2, 8, 0, 5 };
+		System.out.println(arrayString(c));
+		quickSort(c);
+		System.out.println(arrayString(c));
 		/*
 		 * int[] version: Original array: -9 8 7 6 5 4 3 2 1 "Sorted" array: -9
 		 * 1 2 3 5 4 6 7 8 false
@@ -255,6 +257,10 @@ public class Sort {
 		 * ArrayList version: Original: [zeta, yoda, xray, wish, want, vile,
 		 * vial, upon, want] Sorted: [upon, vial, vile, want, want, wish, yoda,
 		 * xray, zeta] false
+		 */
+		/*
+		 * int[]: Original array: 6 8 4 -1 9 3 6 2 8 0 5 "Sorted" array: 0 -1 2
+		 * 3 4 6 5 6 8 8 9 false
 		 */
 	}
 }
